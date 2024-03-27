@@ -1,4 +1,5 @@
 import os
+import os.path
 
 cook_book = {}
 # ingredients_list = []
@@ -14,9 +15,9 @@ with open('cookBook.txt', 'rt', encoding='utf-8') as f:
             ingredients_list.append({'ingredient_name': ingredient_name,
                                      'quantity': quantity,
                                      'measure': measure})
-            a = {dish: ingredients_list}
+            dish_compisit = {dish: ingredients_list}
         empty_string = f.readline()
-        cook_book.update(a)
+        cook_book.update(dish_compisit)
     print(f'cook_book = {cook_book}')
 
 
@@ -35,24 +36,26 @@ def get_shop_list_by_dishes(dishes, person_count):
 get_shop_list_by_dishes(["Омлет", "Бургер"], 5)
 
 
-file_path_1 = os.path.join(os.getcwd(), '1.txt')
-file_path_2 = os.path.join(os.getcwd(), '2.txt')
-file_path_3 = os.path.join(os.getcwd(), '3.txt')
-file_from_writing = os.path.join(os.getcwd(),'file_from_writing')
-files_all = [file_path_1, file_path_2, file_path_3]
-total_count_str = []
-for file in files_all:
-    with open(file, 'rt', encoding='utf-8') as f:
-        count_str = 0
-        for line in f:
-            f.readline()
-            count_str += 1
-        total_count_str.append(count_str)
-contents = [file_path_1.readlines(), file_path_2.readlines(), file_path_3.readlines()]
-line_content = {}
-for key in total_count_str:
-    for value in contents:
-        line_content[key] = value
-sorted_line_content = dict(sorted(line_content.items()))
+
+sorted_path = './sorted/'
+files_all = []
+for filename in os.listdir(sorted_path):
+    if filename.endswith(".txt"):
+        with open(sorted_path + filename, 'rt', encoding='utf-8') as f:
+            text = f.readlines()
+            len_ = len(text)
+            info_file = [len_, filename, text]
+            files_all.append(info_file)
+
+with open('file_from_writing.txt', 'w', encoding='utf-8') as f:
+    for output in sorted(files_all):
+        f.write(f'{output[1]} \n {output[0]} \n {" ".join(output[2])} \n')
+        f.write(f'\n')
+
+
+with open('file_from_writing.txt', 'r', encoding='utf-8') as f:
+    for line in f:
+        print(line.strip())
+
 
 
